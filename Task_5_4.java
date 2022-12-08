@@ -1,56 +1,98 @@
-// Написать метод, который переведёт данное целое число в римский формат.
+//Задание №4. Написать метод, который переведёт данное целое число в римский формат.
 
-//Найти алгоритм перевода
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
 public class Task_5_4 {
+
+
+    // если надо переводить из int, то сначала int надо сконвертировать в String -> String ИМЯ = Integer.toString(arNumber);
+    public static String ArabianToRome(String arNumber) {
+        // сотни
+        Map<String, String> hundreds = new HashMap<>();
+        hundreds.put("0", "");
+        hundreds.put("1", "C");
+        hundreds.put("2", "CC");
+        hundreds.put("3", "CCC");
+        hundreds.put("4", "CD");
+        hundreds.put("5", "D");
+        hundreds.put("6", "DC");
+        hundreds.put("7", "DCC");
+        hundreds.put("8", "DCCC");
+        hundreds.put("9", "CM");
+        // десятки
+        Map<String, String> tens = new HashMap<>();
+        tens.put("0", "");
+        tens.put("1", "X");
+        tens.put("2", "XX");
+        tens.put("3", "XXX");
+        tens.put("4", "XL");
+        tens.put("5", "L");
+        tens.put("6", "LX");
+        tens.put("7", "LXX");
+        tens.put("8", "LXXX");
+        tens.put("9", "XC");
+        // единицы
+        Map<String, String> ones = new HashMap<>();
+        ones.put("0", "");
+        ones.put("1", "I");
+        ones.put("2", "II");
+        ones.put("3", "III");
+        ones.put("4", "IV");
+        ones.put("5", "V");
+        ones.put("6", "VI");
+        ones.put("7", "VII");
+        ones.put("8", "VIII");
+        ones.put("9", "IX");
+
+// дописываем нулями старшие разряды
+        while (arNumber.length() < 4) {
+            arNumber = "0" + arNumber;
+        }
+        String romNumber = "";
+        // разбиваем на символы
+        String[] arSymbols = arNumber.split("");
+        // поразрядно собираем римское число
+        for (int i = arSymbols.length - 1; i >= 0; i--) {
+            switch (i) {
+                case 0: {
+                    for (int j = 0; j < Integer.parseInt(arSymbols[i]); j++) {
+                        romNumber = "M" + romNumber;
+                    }
+                    break;
+                }
+                case 1: {
+                    romNumber = hundreds.get(arSymbols[i]) + romNumber;
+                    break;
+                }
+                case 2: {
+                    romNumber = tens.get(arSymbols[i]) + romNumber;
+                    break;
+                }
+                case 3: {
+                    romNumber = ones.get(arSymbols[i]) + romNumber;
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+        return romNumber;
+    }
+
     public static void main(String[] args) {
 
-
-
-        var
-        a:array[1..13]of string;
-        b:array[1..13]of integer;
-        i,k,n:integer;
-        st,chislo:string;
-        begin
-        st:='MCMDCDCXCLXLXIXVIVI';
-        for i:=1 to 13 do
-            begin
-        if i mod 2<>0 then k:=1 else k:=2;
-        a[i]:=copy(st,1,k);
-        delete(st,1,k);
-        case i of
-        1:b[i]:=1000;
-        2:b[i]:=900;
-        3:b[i]:=500;
-        4:b[i]:=400;
-        5:b[i]:=100;
-        6:b[i]:=90;
-        7:b[i]:=50;
-        8:b[i]:=40;
-        9:b[i]:=10;
-        10:b[i]:=9;
-        11:b[i]:=5;
-        12:b[i]:=4;
-        13:b[i]:=1;
-        end;
-        end;
-        writeln('Arabskoe chislo=');
-        readln(n);
-        i:=0;
-        repeat
-        inc(i);
-        while(n>=b[i]) do
-            begin
-        n:=n-b[i];
-        chislo:=chislo+a[i];
-        end;
-        until n=0;
-        writeln('Rimskoe chislo=',chislo);
-        end.
-
-
-
+        Scanner iScanner = new Scanner(System.in);
+        System.out.print("Введите целое число в арабском формате записи (от 1 до 3999) : ");
+        String arNumber = iScanner.nextLine();
+        iScanner.close();
+        if ((Integer.parseInt(arNumber) < 1) | (Integer.parseInt(arNumber) > 3999)) {
+            System.out.println("Не корректное значение!");
+        } else {
+            System.out.printf("Арабское число %s соответствует римскому числу %s\n", arNumber, ArabianToRome(arNumber));
+        }
     }
 
 }
